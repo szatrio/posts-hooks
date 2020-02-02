@@ -1,26 +1,79 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import axios from 'axios'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+  
+  const [data, setData]= useState([])
+
+  useEffect(() => {
+    axios.get('http://jsonplaceholder.typicode.com/posts')
+    .then(res => {
+      setData(res.data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  })
+
+  
+    if(data.length <= 0){
+      return (
+        <div>Loading...</div>
+      )
+    }else{
+      return (
+          <>
+            <ul>
+              <p>Kumpulan Post</p>
+              {data.map(d => (
+                  <li>{d.title}</li>
+              ))}
+            </ul>
+          </>
+        )
+    }  
+  
 }
+
+// class App extends React.Component {
+//   constructor(){
+//     super()
+//     this.state = {
+//       data : []
+//     }
+//   }
+
+//   componentDidMount(){
+//     axios.get('http://jsonplaceholder.typicode.com/posts')
+//     .then(res => {
+//       this.setState({
+//         data: res.data
+//       })
+//     })
+//     .catch(err => {
+//       console.log(err)
+//     })
+//   }
+
+//   render(){
+//     if(this.state.data.length <= 0){
+//       return (
+//         <div>Loading...</div>
+//       )
+//     }else{
+//       return (
+//           <>
+//             <ul>
+//               <p>Kumpulan Post</p>
+//               {this.state.data.map(d => (
+//                   <li>{d.title}</li>
+//               ))}
+//             </ul>
+//           </>
+//         )
+//     }  
+//   }
+// }
 
 export default App;
